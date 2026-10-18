@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = remove ] && [ -d /run/systemd/system ]; then
+	units=$(systemctl list-units --plain --no-legend 'garage@*.service' 2>/dev/null | awk '{print $1}')
+	if [ -n "$units" ]; then
+		systemctl stop $units >/dev/null 2>&1 || true
+	fi
+fi
+
+if [ -d /run/systemd/system ]; then
+	systemctl daemon-reload >/dev/null 2>&1 || true
+fi

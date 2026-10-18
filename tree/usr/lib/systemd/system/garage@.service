@@ -1,0 +1,48 @@
+[Unit]
+Description=Garage object storage instance %i
+Documentation=https://garagehq.deuxfleurs.fr/documentation/
+ConditionPathExists=/etc/garage/%i.toml
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=garage
+Group=garage
+Environment=GARAGE_CONFIG_FILE=/etc/garage/%i.toml
+Environment=RUST_LOG=garage=info
+Environment=GARAGE_LOG_TO_JOURNALD=1
+ExecStart=/usr/bin/garage -c /etc/garage/%i.toml server
+Restart=on-failure
+RestartSec=5s
+TimeoutStopSec=90s
+LimitNOFILE=42000
+UMask=0027
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/etc/garage /var/lib/garage
+PrivateTmp=true
+PrivateDevices=true
+ProtectClock=true
+ProtectHostname=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+ProtectProc=invisible
+ProcSubset=pid
+CapabilityBoundingSet=
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+RemoveIPC=true
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallErrorNumber=EPERM
+
+[Install]
+WantedBy=multi-user.target

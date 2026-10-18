@@ -1,0 +1,36 @@
+name: garage
+arch: ${ARCH}
+version: ${VERSION}
+release: ${RELEASE}
+section: admin
+priority: optional
+maintainer: Garage OMV packaging <root@localhost>
+description: |
+  Garage is an open-source distributed object storage service tailored for
+  self-hosting, S3-compatible. This package ships the official upstream
+  static binary plus a systemd template unit (garage@.service) for running
+  multiple instances. It creates the dedicated "garage" system user and the
+  /etc/garage configuration directory. It does not start anything by itself;
+  instances are created as garage@<name>.service, by hand or via the
+  openmediavault-garage plugin.
+homepage: https://garagehq.deuxfleurs.fr
+license: AGPL-3.0
+vendor: Deuxfleurs
+
+contents:
+  - src: tree/usr/bin/
+    dst: /usr/bin
+  - src: tree/usr/lib/systemd/system/garage@.service
+    dst: /usr/lib/systemd/system/garage@.service
+  - src: tree/usr/lib/sysusers.d/garage.conf
+    dst: /usr/lib/sysusers.d/garage.conf
+  - src: tree/usr/lib/tmpfiles.d/garage.conf
+    dst: /usr/lib/tmpfiles.d/garage.conf
+  - src: tree/usr/share/doc/garage/
+    dst: /usr/share/doc/garage
+
+overrides:
+  all:
+    deb:
+      fields:
+        Bugs: https://git.deuxfleurs.fr/Deuxfleurs/garage/issues

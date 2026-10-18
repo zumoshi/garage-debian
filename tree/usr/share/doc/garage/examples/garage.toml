@@ -1,0 +1,28 @@
+# Sample Garage configuration.
+# Full reference: https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/
+#
+# The openmediavault-garage plugin writes /etc/garage/<instance>.toml files.
+# This sample is for hand-run instances: copy it to /etc/garage/<name>.toml,
+# add a drop-in granting write access to your paths, then:
+#   systemctl enable --now garage@<name>
+#
+# /etc/systemd/system/garage@<name>.service.d/override.conf
+#   [Service]
+#   ReadWritePaths=/path/to/metadata /path/to/data
+
+metadata_dir = "/var/lib/garage/meta"
+data_dir = "/var/lib/garage/data"
+
+replication_factor = 1
+
+rpc_bind_addr = "[::]:3901"
+rpc_public_addr = "127.0.0.1:3901"
+rpc_secret = "<openssl rand -hex 32>"
+
+[s3_api]
+s3_region = "garage"
+api_bind_addr = "[::]:3900"
+
+[admin]
+api_bind_addr = "127.0.0.1:3903"
+admin_token = "<openssl rand -hex 32>"
