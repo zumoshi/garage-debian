@@ -66,7 +66,8 @@ allows `/etc/garage` and `/var/lib/garage`.
   the difference is the template unit for multi-instance use.
 - Secrets (`rpc_secret`, admin tokens) are not written by this package.
   Whatever creates `/etc/garage/<name>.toml` owns them; Garage refuses
-  world-readable secret files, and the OMV plugin renders them 0600.
+  secret files that are not mode 0600, so the OMV plugin renders them
+  0600 owned by the `garage` user.
 
 License: the Garage binary is AGPL-3.0, (c) Deuxfleurs. Packaging glue in
 this repo is provided under the same terms.

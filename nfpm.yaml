@@ -29,6 +29,10 @@ contents:
   - src: tree/usr/share/doc/garage/
     dst: /usr/share/doc/garage
 
+scripts:
+  postinstall: scripts/postinst
+  preremove: scripts/prerm
+
 overrides:
   all:
     deb:
