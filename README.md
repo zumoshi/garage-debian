@@ -24,9 +24,13 @@ git add checksums
 Then build:
 
 ```sh
-VERSION=2.4.1 ARCH=amd64 ./build.sh   # dist/garage_2.4.1-1_amd64.deb
+VERSION=2.4.1 ARCH=amd64 ./build.sh   # dist/garage_2.4.1-2_amd64.deb
 VERSION=2.4.1 ARCH=arm64 ./build.sh
 ```
+
+The package version comes from the top entry of `debian/changelog`.
+`RELEASE` defaults to that entry's Debian revision, and the build fails when
+`VERSION-RELEASE` does not match it. Add a changelog entry for each release.
 
 Needs `nfpm` (`deb [trusted=yes] https://apt.fury.io/goreleaser/ /`) and
 `curl`. Builds are checksum-verified against `checksums/`, which CI enforces.
@@ -34,13 +38,25 @@ Needs `nfpm` (`deb [trusted=yes] https://apt.fury.io/goreleaser/ /`) and
 ## CI
 
 `.github/workflows/build.yml` runs on tags `v*` and on manual dispatch with a
-version input. It produces `garage_<v>-1_amd64.deb` and `..._arm64.deb` and
+version input. It produces `garage_<v>-<release>_amd64.deb` and `..._arm64.deb` and
 attaches them to the GitHub release on tag builds.
+
+## Test
+
+`tests/smoke.sh` runs lintian on a built deb, then installs it on a
+disposable Debian 13 host over ssh. It checks the `/etc/garage` mode, the
+unit hardening, that an upgrade restarts running instances and leaves stopped
+ones stopped, and the remove, purge and reinstall cycle. It replaces the
+host's garage package and leaves the tested deb installed.
+
+```sh
+tests/smoke.sh root@garage-test.lan dist/garage_2.4.1-2_amd64.deb
+```
 
 ## Install
 
 ```sh
-apt install ./garage_2.4.1-1_amd64.deb
+apt install ./garage_2.4.1-2_amd64.deb
 ```
 
 Hand-run an instance:

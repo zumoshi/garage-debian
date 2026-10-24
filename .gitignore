@@ -1,3 +1,4 @@
 dist/
 tree/usr/bin/garage
 *.deb
+tree/usr/share/doc/garage/changelog.Debian.gz

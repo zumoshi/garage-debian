@@ -4,7 +4,7 @@ set -eu
 usage() {
 	cat <<EOF
 Usage:
-  VERSION=2.4.1 ARCH=amd64 [RELEASE=1] $0          build one deb
+  VERSION=2.4.1 ARCH=amd64 [RELEASE=n] $0          build one deb
   VERSION=2.4.1 ARCH=amd64 $0 record               pin the upstream checksum
   VERSION=2.4.1 ARCH=all $0 verify                 verify all pinned checksums
 EOF
@@ -68,7 +68,12 @@ verify)
 	;;
 build)
 	[ -n "${VERSION:-}" ] && [ -n "${ARCH:-}" ] || usage
-	RELEASE=${RELEASE:-1}
+	changelog_version=$(sed -n '1s/^garage (\(.*\)).*/\1/p' debian/changelog)
+	RELEASE=${RELEASE:-${changelog_version##*-}}
+	[ "${VERSION}-${RELEASE}" = "$changelog_version" ] || {
+		echo "debian/changelog is at ${changelog_version}; add an entry for ${VERSION}-${RELEASE}" >&2
+		exit 1
+	}
 	OUT=${OUT:-dist}
 	target_for_arch "$ARCH" >/dev/null || usage
 	download "$ARCH"
@@ -83,9 +88,10 @@ build)
 		echo "checksum mismatch for ${ARCH}" >&2
 		exit 1
 	}
+	gzip -9nc debian/changelog >tree/usr/share/doc/garage/changelog.Debian.gz
 	mkdir -p "$OUT"
-	VERSION="$VERSION" RELEASE="$RELEASE" ARCH="$ARCH" \
-		nfpm package -f nfpm.yaml -p deb \
+	export VERSION RELEASE ARCH
+	nfpm package -f nfpm.yaml -p deb \
 		-t "${OUT}/garage_${VERSION}-${RELEASE}_${ARCH}.deb"
 	;;
 *)
