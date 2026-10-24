@@ -4,8 +4,9 @@ version: ${VERSION}
 release: ${RELEASE}
 section: admin
 priority: optional
-maintainer: Garage OMV packaging <root@localhost>
+maintainer: bor <me@bor691.ir>
 description: |
+  S3-compatible distributed object storage for self-hosting
   Garage is an open-source distributed object storage service tailored for
   self-hosting, S3-compatible. This package ships the official upstream
   static binary plus a systemd template unit (garage@.service) for running
@@ -28,6 +29,8 @@ contents:
     dst: /usr/lib/tmpfiles.d/garage.conf
   - src: tree/usr/share/doc/garage/
     dst: /usr/share/doc/garage
+  - src: tree/usr/share/lintian/overrides/garage
+    dst: /usr/share/lintian/overrides/garage
 
 scripts:
   postinstall: scripts/postinst

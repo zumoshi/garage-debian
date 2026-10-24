@@ -1,0 +1,13 @@
+# Upstream's release binary is shipped byte-identical and checksum-pinned.
+# Stripping it would break the pin.
+garage: unstripped-binary-or-object [usr/bin/garage]
+# Static Rust build: the unsafe-libyaml crate (via serde_yaml) is linked in.
+# There is no system library to use instead.
+garage: embedded-library libyaml [usr/bin/garage]
+# static-pie executable with no DT_NEEDED entries by design.
+garage: shared-library-lacks-prerequisites [usr/bin/garage]
+# Upstream ships no manual page. Reference: garage --help and
+# https://garagehq.deuxfleurs.fr/documentation/
+garage: no-manual-page [usr/bin/garage]
+# Strings inside upstream's binary. Report upstream, not fixable here.
+garage: spelling-error-in-binary * [usr/bin/garage]
