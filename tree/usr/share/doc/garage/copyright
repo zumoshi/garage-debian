@@ -7,10 +7,6 @@ Comment: usr/bin/garage is upstream's static musl release binary, shipped
  Cargo.lock, each under its own license.
 
 Files: *
-Copyright: 2026 bor <me@bor691.ir>
-License: AGPL-3
-
-Files: tree/usr/bin/garage
 Copyright: Deuxfleurs and the Garage contributors
 License: AGPL-3
 
