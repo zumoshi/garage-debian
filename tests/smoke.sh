@@ -3,7 +3,7 @@
 # Debian host. Destructive to that host's garage package and to instances
 # named smoke-*.
 #
-#   tests/smoke.sh root@garage-test.lan dist/garage_2.4.1-2_amd64.deb
+#   tests/smoke.sh root@garage-test.lan dist/garage_2.4.1-1_amd64.deb
 #
 # The host must run systemd and have curl. Port range 3910-3923 must be free.
 set -euo pipefail

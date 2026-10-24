@@ -24,7 +24,7 @@ git add checksums
 Then build:
 
 ```sh
-VERSION=2.4.1 ARCH=amd64 ./build.sh   # dist/garage_2.4.1-2_amd64.deb
+VERSION=2.4.1 ARCH=amd64 ./build.sh   # dist/garage_2.4.1-1_amd64.deb
 VERSION=2.4.1 ARCH=arm64 ./build.sh
 ```
 
@@ -50,13 +50,13 @@ ones stopped, and the remove, purge and reinstall cycle. It replaces the
 host's garage package and leaves the tested deb installed.
 
 ```sh
-tests/smoke.sh root@garage-test.lan dist/garage_2.4.1-2_amd64.deb
+tests/smoke.sh root@garage-test.lan dist/garage_2.4.1-1_amd64.deb
 ```
 
 ## Install
 
 ```sh
-apt install ./garage_2.4.1-2_amd64.deb
+apt install ./garage_2.4.1-1_amd64.deb
 ```
 
 Hand-run an instance:

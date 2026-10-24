@@ -1,18 +1,14 @@
-garage (2.4.1-2) trixie; urgency=medium
-
-  * Restart running garage@ instances on upgrade with try-restart. Stopped
-    and disabled instances stay stopped.
-  * tmpfiles.d declares /etc/garage as 0750 root:garage.
-  * garage@.service: drop ReadWritePaths=/etc/garage and the redundant
-    GARAGE_CONFIG_FILE.
-  * Maintainer scripts handle the standard arguments. Add postrm.
-  * Ship a DEP-5 copyright file and this changelog.
-
- -- bor <me@bor691.ir>  Sat, 24 Oct 2026 13:48:23 +0000
-
 garage (2.4.1-1) trixie; urgency=medium
 
-  * Initial packaging of upstream's static binary with a garage@.service
-    template unit, sysusers.d and tmpfiles.d.
+  * Package upstream release 2.4.1. Release notes:
+    https://git.deuxfleurs.fr/Deuxfleurs/garage/releases/tag/v2.4.1
+  * Ship upstream's static musl release binary, pinned by checksum.
+  * Add a garage@.service template unit for running multiple instances.
+  * Create the garage system user with sysusers.d. tmpfiles.d declares
+    /etc/garage as 0750 root:garage, read-only to the service.
+  * Restart running garage@ instances on upgrade with try-restart. Stopped
+    and disabled instances stay stopped.
+  * Maintainer scripts handle the standard arguments.
+  * Ship a DEP-5 copyright file and this changelog.
 
- -- bor <me@bor691.ir>  Sun, 18 Oct 2026 10:35:19 +0000
+ -- bor <me@bor691.ir>  Sat, 24 Oct 2026 16:42:15 +0000
