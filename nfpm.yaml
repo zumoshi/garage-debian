@@ -32,6 +32,7 @@ contents:
 scripts:
   postinstall: scripts/postinst
   preremove: scripts/prerm
+  postremove: scripts/postrm
 
 overrides:
   all:

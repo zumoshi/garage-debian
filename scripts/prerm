@@ -1,13 +1,15 @@
 #!/bin/sh
 set -e
 
-if [ "$1" = remove ] && [ -d /run/systemd/system ]; then
-	units=$(systemctl list-units --plain --no-legend 'garage@*.service' 2>/dev/null | awk '{print $1}')
-	if [ -n "$units" ]; then
-		systemctl stop $units >/dev/null 2>&1 || true
+case "$1" in
+remove)
+	if [ -d /run/systemd/system ]; then
+		deb-systemd-invoke stop 'garage@*.service' >/dev/null || true
 	fi
-fi
-
-if [ -d /run/systemd/system ]; then
-	systemctl daemon-reload >/dev/null 2>&1 || true
-fi
+	;;
+upgrade | deconfigure | failed-upgrade) ;;
+*)
+	echo "prerm called with unknown argument '$1'" >&2
+	exit 1
+	;;
+esac

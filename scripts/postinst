@@ -1,14 +1,25 @@
 #!/bin/sh
 set -e
 
-if command -v systemd-sysusers >/dev/null 2>&1; then
-	systemd-sysusers garage.conf
-fi
-
-if command -v systemd-tmpfiles >/dev/null 2>&1; then
-	systemd-tmpfiles --create garage.conf
-fi
-
-if [ -d /run/systemd/system ]; then
-	systemctl daemon-reload >/dev/null 2>&1 || true
-fi
+case "$1" in
+configure)
+	if command -v systemd-sysusers >/dev/null 2>&1; then
+		systemd-sysusers garage.conf
+	fi
+	if command -v systemd-tmpfiles >/dev/null 2>&1; then
+		systemd-tmpfiles --create garage.conf
+	fi
+	if [ -d /run/systemd/system ]; then
+		systemctl --system daemon-reload >/dev/null || true
+		# try-restart only touches running instances, so stopped ones stay stopped.
+		if [ -n "$2" ]; then
+			deb-systemd-invoke try-restart 'garage@*.service' >/dev/null || true
+		fi
+	fi
+	;;
+abort-upgrade | abort-remove | abort-deconfigure) ;;
+*)
+	echo "postinst called with unknown argument '$1'" >&2
+	exit 1
+	;;
+esac
