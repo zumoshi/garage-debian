@@ -36,9 +36,3 @@ scripts:
   postinstall: scripts/postinst
   preremove: scripts/prerm
   postremove: scripts/postrm
-
-overrides:
-  all:
-    deb:
-      fields:
-        Bugs: https://git.deuxfleurs.fr/Deuxfleurs/garage/issues
