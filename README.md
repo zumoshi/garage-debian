@@ -48,7 +48,10 @@ Hand-run an instance:
 ```sh
 zcat /usr/share/doc/garage/examples/garage.toml.gz 2>/dev/null || cat /usr/share/doc/garage/examples/garage.toml
 # edit, save as /etc/garage/myinst.toml
-printf '[Service]\nReadWritePaths=/var/lib/garage\n' \
+chown root:garage /etc/garage/myinst.toml
+chmod 0640 /etc/garage/myinst.toml
+mkdir -p /etc/systemd/system/garage@myinst.service.d
+printf '[Service]\nReadWritePaths=/path/to/metadata /path/to/data\n' \
   > /etc/systemd/system/garage@myinst.service.d/override.conf
 systemctl daemon-reload
 systemctl enable --now garage@myinst
@@ -56,7 +59,8 @@ systemctl enable --now garage@myinst
 
 `ProtectSystem=strict` is active in the base unit, so every path Garage must
 write needs a `ReadWritePaths` entry in the instance drop-in. The base unit
-allows `/etc/garage` and `/var/lib/garage`.
+allows only `/var/lib/garage`, so paths under it need no drop-in.
+`/etc/garage` is `0750 root:garage` and read-only to the service.
 
 ## Design notes
 
