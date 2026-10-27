@@ -24,16 +24,19 @@ git add checksums
 Then build:
 
 ```sh
-VERSION=2.4.1 ARCH=amd64 ./build.sh   # dist/garage_2.4.1-1_amd64.deb
-VERSION=2.4.1 ARCH=arm64 ./build.sh
+make build                       # dist/garage_2.4.1-1_amd64.deb
+ARCH=arm64 ./build.sh            # needs nfpm on PATH, or NFPM=/path/to/nfpm
 ```
 
 The package version comes from the top entry of `debian/changelog`.
 `RELEASE` defaults to that entry's Debian revision, and the build fails when
 `VERSION-RELEASE` does not match it. Add a changelog entry for each release.
 
-Needs `nfpm` (`deb [trusted=yes] https://apt.fury.io/goreleaser/ /`) and
-`curl`. Builds are checksum-verified against `checksums/`, which CI enforces.
+`make build` downloads nfpm from its pinned GitHub release into `.tools/` and
+checks it against `checksums/nfpm_*.sha256`. To move to a new nfpm, change
+`NFPM_VERSION` in the `Makefile` and commit the sha256 of the new
+`Linux_x86_64` tarball from the release's `checksums.txt`. The garage binary
+is checksum-verified against `checksums/` on every build.
 
 ## CI
 

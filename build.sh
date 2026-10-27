@@ -96,7 +96,7 @@ build)
 	gzip -9nc debian/changelog >tree/usr/share/doc/garage/changelog.Debian.gz
 	mkdir -p "$OUT"
 	export VERSION RELEASE ARCH
-	nfpm package -f nfpm.yaml -p deb \
+	"${NFPM:-nfpm}" package -f nfpm.yaml -p deb \
 		-t "${OUT}/garage_${VERSION}-${RELEASE}_${ARCH}.deb"
 	;;
 *)
