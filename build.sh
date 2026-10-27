@@ -4,9 +4,10 @@ set -eu
 usage() {
 	cat <<EOF
 Usage:
-  VERSION=2.4.1 ARCH=amd64 [RELEASE=n] $0          build one deb
-  VERSION=2.4.1 ARCH=amd64 $0 record               pin the upstream checksum
-  VERSION=2.4.1 ARCH=all $0 verify                 verify all pinned checksums
+  ARCH=amd64 [RELEASE=n] $0             build one deb at the debian/changelog version
+  [VERSION=2.4.1] ARCH=amd64 $0 record   pin the upstream checksum
+  [VERSION=2.4.1] $0 verify              verify all pinned checksums
+  $0 version                            print the debian/changelog version
 EOF
 	exit 2
 }
@@ -37,15 +38,20 @@ download() {
 	chmod 0755 tree/usr/bin/garage
 }
 
+changelog_version=$(sed -n '1s/^garage (\(.*\)).*/\1/p' debian/changelog)
+VERSION=${VERSION:-${changelog_version%-*}}
+
 case "${1:-build}" in
+version)
+	echo "$changelog_version"
+	;;
 record)
-	[ -n "${VERSION:-}" ] && [ -n "${ARCH:-}" ] || usage
+	[ -n "${ARCH:-}" ] || usage
 	download "$ARCH"
 	sha256sum tree/usr/bin/garage | awk '{print $1}' > "checksums/${VERSION}.${ARCH}.sha256"
 	echo "pinned checksums/${VERSION}.${ARCH}.sha256"
 	;;
 verify)
-	[ -n "${VERSION:-}" ] || usage
 	status=0
 	for f in checksums/"${VERSION}".*.sha256; do
 		[ -e "$f" ] || {
@@ -67,8 +73,7 @@ verify)
 	exit $status
 	;;
 build)
-	[ -n "${VERSION:-}" ] && [ -n "${ARCH:-}" ] || usage
-	changelog_version=$(sed -n '1s/^garage (\(.*\)).*/\1/p' debian/changelog)
+	[ -n "${ARCH:-}" ] || usage
 	RELEASE=${RELEASE:-${changelog_version##*-}}
 	[ "${VERSION}-${RELEASE}" = "$changelog_version" ] || {
 		echo "debian/changelog is at ${changelog_version}; add an entry for ${VERSION}-${RELEASE}" >&2
