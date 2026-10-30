@@ -1,14 +1,22 @@
 NFPM_VERSION := 2.48.0
 NFPM_TARBALL := .tools/nfpm_$(NFPM_VERSION)_Linux_x86_64.tar.gz
 NFPM := .tools/nfpm-$(NFPM_VERSION)/nfpm
+TOOLS_IMAGE := garage-debian-tools
 
-.PHONY: build verify
+.PHONY: build verify lint tools-image
 
 build: $(NFPM)
 	ARCH=amd64 NFPM=$(CURDIR)/$(NFPM) ./build.sh
 
 verify:
 	./build.sh verify
+
+lint: build tools-image
+	docker run --rm -u $(shell id -u):$(shell id -g) -v $(CURDIR)/dist:/dist:ro $(TOOLS_IMAGE) \
+		sh -c 'lintian --version && lintian --fail-on error,warning,info -I /dist/*.deb'
+
+tools-image:
+	docker build -q -t $(TOOLS_IMAGE) - <ci/tools.Dockerfile >/dev/null
 
 $(NFPM_TARBALL):
 	mkdir -p $(@D)
