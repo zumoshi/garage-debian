@@ -50,7 +50,8 @@ make verify   # every pinned upstream checksum of this version
 make lint     # build the amd64 deb, then trixie's lintian
 ```
 
-Tool versions are pinned in one place each: nfpm and the actionlint image in
+`make check` and `make lint` run their tools in Docker. Tool versions
+are pinned in one place each: nfpm and the actionlint image in
 the `Makefile`, the trixie image for lintian and shellcheck in
 `ci/tools.Dockerfile`. Actions are pinned by commit SHA.
 
