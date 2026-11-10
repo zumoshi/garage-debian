@@ -126,4 +126,5 @@ allows only `/var/lib/garage`, so paths under it need no drop-in.
   0600 owned by the `garage` user.
 
 License: the Garage binary is AGPL-3.0, (c) Deuxfleurs. Packaging glue in
-this repo is provided under the same terms.
+this repo is provided under the same terms. The full license text is in
+`LICENSE`.
