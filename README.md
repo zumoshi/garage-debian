@@ -17,15 +17,15 @@ One-time per release, pin the upstream checksums (CI builds amd64 only, and
 `make verify` checks every pinned architecture):
 
 ```sh
-VERSION=2.4.1 ARCH=amd64 ./build.sh record
-VERSION=2.4.1 ARCH=arm64 ./build.sh record
+VERSION=2.5.0 ARCH=amd64 ./build.sh record
+VERSION=2.5.0 ARCH=arm64 ./build.sh record
 git add checksums
 ```
 
 Then build:
 
 ```sh
-make build                       # dist/garage_2.4.1-1_amd64.deb
+make build                       # dist/garage_2.5.0-1_amd64.deb
 ARCH=arm64 ./build.sh            # needs nfpm on PATH, or NFPM=/path/to/nfpm
 ```
 
@@ -58,7 +58,7 @@ the `Makefile`, the trixie image for lintian and shellcheck in
 ## Release
 
 Push a tag `v<version>-<release>` that equals the top `debian/changelog`
-entry, for example `v2.4.1-1`, or `v2.4.1-2` for a packaging-only fix. CI
+entry, for example `v2.5.0-1`, or `v2.5.0-2` for a packaging-only fix. CI
 fails when the tag and the changelog disagree. After the checks pass, the
 `sign` job writes `SHA256SUMS` for the deb and a detached signature
 `SHA256SUMS.asc` with the key in the `GPG_PRIVATE_KEY` secret (passphrase
@@ -86,13 +86,13 @@ ones stopped, and the remove, purge and reinstall cycle. It replaces the
 host's garage package and leaves the tested deb installed.
 
 ```sh
-tests/smoke.sh root@garage-test.lan dist/garage_2.4.1-1_amd64.deb
+tests/smoke.sh root@garage-test.lan dist/garage_2.5.0-1_amd64.deb
 ```
 
 ## Install
 
 ```sh
-apt install ./garage_2.4.1-1_amd64.deb
+apt install ./garage_2.5.0-1_amd64.deb
 ```
 
 Hand-run an instance:
